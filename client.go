@@ -167,7 +167,7 @@ func httpClient(ctx context.Context, addr string, namespace string, outs []inter
 		var resp clientResponse
 
 		if err := json.NewDecoder(httpResp.Body).Decode(&resp); err != nil {
-			return clientResponse{}, xerrors.Errorf("http status %s unmarshaling response: %w", httpResp.Status, err)
+			return clientResponse{}, xerrors.Errorf("unmarshaling response: %w", err)
 		}
 
 		if resp.ID != *cr.req.ID {
@@ -189,10 +189,7 @@ func httpClient(ctx context.Context, addr string, namespace string, outs []inter
 func websocketClient(ctx context.Context, addr string, namespace string, outs []interface{}, requestHeader http.Header, config Config) (ClientCloser, error) {
 	connFactory := func() (*websocket.Conn, error) {
 		conn, _, err := websocket.DefaultDialer.Dial(addr, requestHeader)
-		if err != nil {
-			return nil, xerrors.Errorf("cannot dial address %s for %w", addr, err)
-		}
-		return conn, nil
+		return conn, err
 	}
 
 	if config.proxyConnFactory != nil {
