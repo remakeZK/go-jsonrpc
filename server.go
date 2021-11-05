@@ -109,6 +109,7 @@ func init() {
 
 	go func() {
 		for {
+			log.Info("refreshing limit map")
 			time.Sleep(time.Minute)
 			l.mu.Lock()
 			l.lm = map[string]int{}
@@ -170,7 +171,7 @@ func (s *RPCServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		log.Warnf("ip %s reach to limit method %s\n", ip, req.Method)
+		log.Warnf("ip %s reach to limit method %s count %d\n", ip, req.Method, count)
 		rpcError(wf, &req, rpcMaxLimit, fmt.Errorf("request meet limit %s %d", ip, count))
 		return
 	}
