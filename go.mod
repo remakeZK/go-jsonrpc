@@ -1,4 +1,4 @@
-module github.com/remakeZK/go-jsonrpc
+module github.com/filecoin-project/go-jsonrpc
 
 go 1.14
 
